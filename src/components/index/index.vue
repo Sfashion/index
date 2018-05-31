@@ -3,79 +3,27 @@
     <div class="banner">
         <swiper :options="swiperOption">
             <!-- slides -->
-            <swiper-slide>
+            <swiper-slide v-for="(item,n) in banner" :key="n">
                 <div class="ban">
                     <div class="banner_left">
                         <div class="xian1"></div>
                         <div class="xian2"></div>
                     </div>
                     <div class="banner_zh">
-                        <img src="../../assets/img/banner2.png" alt="">
+                        <img :src="item.img[0].url" alt="">
                     </div>
                     <div class="banner_right">
                         <div class="kuang">
                             <div class="zuo_ku"></div>
                             <input type="text" class="ss" placeholder="搜索新品吧">
-                            <!--<div class="searchlogo"></div>-->
                             <router-link to="" class="sousuo"></router-link>
                         </div>
                         <div class="ban_xia">
-                            <p class="south">THE SOUTH <span>IN</span></p>
-                            <p class="early">THE EARLY MORNING</p>
+                            <div v-html="item.ename"></div>
                             <div class="changxian"></div>
                             <div class="duanxian"></div>
-                            <p class="nanfa">南法清晨，拂晓初绽，点点金光谧漫整片天空</p>
-                            <router-link to="" class="more">MORE</router-link>
-                        </div>
-                    </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="ban">
-                    <div class="banner_left">
-                        <div class="xian1"></div>
-                        <div class="xian2"></div>
-                    </div>
-                    <div class="banner_zh">
-                        <img src="../../assets/img/banner1.png" alt="">
-                    </div>
-                    <div class="banner_right">
-                        <div class="kuang">
-                            <div class="zuo_ku"></div>
-                            <input type="text" class="ss" placeholder="搜索新品吧">
-                        </div>
-                        <div class="ban_xia">
-                            <p class="south">THE SOUTH <span>IN</span></p>
-                            <p class="early">THE EARLY MORNING</p>
-                            <div class="changxian"></div>
-                            <div class="duanxian"></div>
-                            <p class="nanfa">南法清晨，拂晓初绽，点点金光谧漫整片天空</p>
-                            <router-link to="" class="more">MORE</router-link>
-                        </div>
-                    </div>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="ban">
-                    <div class="banner_left">
-                        <div class="xian1"></div>
-                        <div class="xian2"></div>
-                    </div>
-                    <div class="banner_zh">
-                        <img src="../../assets/img/banner3.png" alt="">
-                    </div>
-                    <div class="banner_right">
-                        <div class="kuang">
-                            <div class="zuo_ku"></div>
-                            <input type="text" class="ss" placeholder="搜索新品吧">
-                        </div>
-                        <div class="ban_xia">
-                            <p class="south">THE SOUTH <span>IN</span></p>
-                            <p class="early">THE EARLY MORNING</p>
-                            <div class="changxian"></div>
-                            <div class="duanxian"></div>
-                            <p class="nanfa">南法清晨，拂晓初绽，点点金光谧漫整片天空</p>
-                            <router-link to="" class="more">MORE</router-link>
+                            <p class="nanfa">{{item.des}}</p>
+                            <router-link to="/list" class="more">MORE</router-link>
                         </div>
                     </div>
                 </div>
@@ -84,12 +32,6 @@
             <div class="swiper-pagination"  slot="pagination"></div>
         </swiper>
 
-
-        <!--<ul class="lun">
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>-->
     </div>
     <div class="man">
         <img src="../../assets/img/man.jpg" alt="">
@@ -99,20 +41,7 @@
             <img src="../../assets/img/tu1.jpg" alt="">
         </div>
         <div class="xinpin_xia">
-            <div class="xinpin_tu2">
-                <img src="../../assets/img/guo2.jpg" alt="">
-            </div>
-            <div class="xinpin_tu3">
-                <img src="../../assets/img/guo3.png" alt="">
-            </div>
-            <div class="xinpin_right">
-                <div class="xinpin_tu4">
-                    <img src="../../assets/img/guo4.jpg" alt="">
-                </div>
-                <div class="jia">
-                    <img src="../../assets/img/jia.jpg" alt="">
-                </div>
-            </div>
+            <img src="../../assets/img/tuijian.png" alt="" style="width: 100%">
         </div>
     </div>
     <div class="rexiao">
@@ -141,7 +70,7 @@
                     <div class="rmb">RMB</div>
                     <div class="qian">699</div>
                 </div>
-                <router-link to="" class="more1">MORE</router-link>
+                <router-link to="/list" class="more1">MORE</router-link>
             </div>
         </div>
         <div class="rexiao_xia">
@@ -163,7 +92,7 @@
                     <div class="rmb">RMB</div>
                     <div class="qian">699</div>
                 </div>
-                <router-link to="" class="more2">MORE</router-link>
+                <router-link to="/list" class="more2">MORE</router-link>
             </div>
             <div class="rx_tu1">
                 <img src="../../assets/img/guo6.jpg" alt="">
@@ -208,9 +137,10 @@
                         el: '.swiper-pagination',
                         clickable :true,
                     },
-                    loop:true,
+                    // loop:true,
                     autoplay:true
-                }
+                },
+                banner:[]
             }
         },
         created() {
@@ -219,6 +149,13 @@
                     val.coverimg = JSON.parse(val.coverimg);
                 });
                 this.data=response.body;
+            });
+
+            this.$http.get('/api/index/index/banner').then(response => {
+                response.body.forEach(val=>{
+                    val.img = JSON.parse(val.img);
+                });
+                this.banner=response.body;
             });
         },
     }
